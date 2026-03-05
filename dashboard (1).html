@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infinity Kingdom — Conversion Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--dark:#08080f;--card:#111118;--gold:#f0b429;--purple:#7c3aed;--green:#22c55e;--red:#ef4444;--text:#e2e8f0;--muted:#64748b}
+  body{background:var(--dark);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding:2rem}
+
+  header{text-align:center;margin-bottom:3rem}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:.1em;
+    background:linear-gradient(135deg,#f0b429,#7c3aed);-webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;background-clip:text}
+  header p{color:var(--muted);font-size:.9rem;margin-top:.3rem}
+
+  .live-dot{display:inline-block;width:8px;height:8px;background:var(--green);
+    border-radius:50%;margin-right:.4rem;animation:blink 1.2s ease-in-out infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+  /* TOP STATS */
+  .top-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2.5rem}
+  .top-stat{background:var(--card);border:1px solid #ffffff08;border-radius:12px;padding:1.5rem;text-align:center}
+  .top-stat-val{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--gold);display:block;letter-spacing:.05em}
+  .top-stat-label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.15em}
+
+  /* WINNER BADGE */
+  .winner-banner{
+    background:linear-gradient(135deg,#1a0a2e,#0a1a0a);
+    border:1px solid var(--gold);border-radius:12px;
+    padding:1.2rem 2rem;margin-bottom:2.5rem;
+    display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+  }
+  .winner-banner .trophy{font-size:2rem}
+  .winner-banner h3{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.1em;color:var(--gold)}
+  .winner-banner p{font-size:.85rem;color:#94a3b8}
+
+  /* LP CARDS */
+  .lp-grid{display:grid;gap:1rem}
+  .lp-card{
+    background:var(--card);border:1px solid #ffffff08;border-radius:12px;
+    padding:1.5rem 2rem;display:grid;
+    grid-template-columns:auto 1fr auto;
+    gap:1rem;align-items:center;transition:.3s;
+  }
+  .lp-card:hover{border-color:#ffffff15;transform:translateX(4px)}
+  .lp-card.winner{border-color:var(--gold);background:linear-gradient(135deg,#1a1205,var(--card))}
+
+  .lp-rank{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:#ffffff15;width:50px;text-align:center}
+  .lp-card.winner .lp-rank{color:var(--gold)}
+
+  .lp-info h3{font-size:1rem;font-weight:600;color:#fff;margin-bottom:.3rem}
+  .lp-info .lp-url{font-size:.75rem;color:var(--muted);margin-bottom:.8rem}
+
+  .bar-wrap{background:#ffffff08;border-radius:99px;height:8px;overflow:hidden;margin-bottom:.4rem}
+  .bar{height:100%;border-radius:99px;transition:width 1s ease;background:linear-gradient(90deg,var(--purple),var(--gold))}
+  .lp-card.winner .bar{background:linear-gradient(90deg,var(--gold),#f59e0b)}
+
+  .lp-meta{font-size:.75rem;color:var(--muted);display:flex;gap:1rem;flex-wrap:wrap}
+  .lp-meta span{display:flex;align-items:center;gap:.3rem}
+
+  .lp-clicks{text-align:center}
+  .click-num{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:#fff;display:block;line-height:1}
+  .click-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+  .click-rate{font-size:.85rem;color:var(--green);font-weight:600;margin-top:.2rem;display:block}
+
+  /* RESET */
+  .actions{text-align:center;margin-top:2rem}
+  .btn-reset{
+    font-family:'Space Grotesk',sans-serif;font-size:.8rem;letter-spacing:.1em;
+    padding:.6rem 1.5rem;border:1px solid #ffffff15;color:var(--muted);
+    background:transparent;cursor:pointer;border-radius:6px;transition:.3s;
+    text-transform:uppercase;
+  }
+  .btn-reset:hover{border-color:var(--red);color:var(--red)}
+
+  /* INSTRUCTIONS */
+  .instructions{
+    background:var(--card);border:1px solid #ffffff08;border-radius:12px;
+    padding:1.5rem 2rem;margin-top:2rem;
+  }
+  .instructions h3{font-size:.9rem;color:var(--gold);margin-bottom:1rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+  .instructions ol{padding-left:1.2rem;color:#94a3b8;font-size:.85rem;line-height:2}
+  .instructions code{background:#ffffff10;padding:.1rem .4rem;border-radius:4px;color:#e2e8f0;font-size:.8rem}
+
+  .last-updated{text-align:center;color:var(--muted);font-size:.75rem;margin-top:1.5rem}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚔ Infinity Kingdom</h1>
+  <p><span class="live-dot"></span>Conversion Dashboard — Live Results</p>
+</header>
+
+<div class="top-stats">
+  <div class="top-stat">
+    <span class="top-stat-val" id="total-clicks">0</span>
+    <span class="top-stat-label">Total Clicks</span>
+  </div>
+  <div class="top-stat">
+    <span class="top-stat-val" id="best-lp">—</span>
+    <span class="top-stat-label">Best LP</span>
+  </div>
+  <div class="top-stat">
+    <span class="top-stat-val" id="best-rate">0%</span>
+    <span class="top-stat-label">Best Rate</span>
+  </div>
+  <div class="top-stat">
+    <span class="top-stat-val" id="total-views">0</span>
+    <span class="top-stat-label">Total Views</span>
+  </div>
+</div>
+
+<div class="winner-banner" id="winner-banner">
+  <span class="trophy">🏆</span>
+  <div>
+    <h3 id="winner-name">No data yet</h3>
+    <p id="winner-desc">Share your landing page links to start collecting data</p>
+  </div>
+</div>
+
+<div class="lp-grid" id="lp-grid"></div>
+
+<div class="actions">
+  <button class="btn-reset" onclick="resetData()">🗑 Reset all data</button>
+</div>
+
+<div class="instructions">
+  <h3>📋 How to track conversions</h3>
+  <ol>
+    <li>Add the tracking code (see below) to each of your 5 landing pages</li>
+    <li>Share each LP link to different audiences</li>
+    <li>Come back to this dashboard to see which one converts best</li>
+    <li>The dashboard updates automatically every 5 seconds</li>
+  </ol>
+</div>
+
+<p class="last-updated">Last updated: <span id="last-update">just now</span></p>
+
+<script>
+const LPS = [
+  { id:'lp1', name:'LP1 — Cinematic Dark', emoji:'🌑', url:'lp1-cinematic-en.html' },
+  { id:'lp2', name:'LP2 — Blood & Fire',   emoji:'🔥', url:'lp2-blood-fire-en.html' },
+  { id:'lp3', name:'LP3 — Lore & Mystique',emoji:'📜', url:'lp3-lore-mystique-en.html' },
+  { id:'lp4', name:'LP4 — Social Proof',   emoji:'👥', url:'lp4-social-proof-en.html' },
+  { id:'lp5', name:'LP5 — Brutal Minimal', emoji:'◼', url:'lp5-brutal-minimal-en.html' },
+];
+
+function getData(){
+  try{
+    const d = localStorage.getItem('ik_dashboard');
+    return d ? JSON.parse(d) : initData();
+  }catch(e){ return initData(); }
+}
+
+function initData(){
+  const d = {};
+  LPS.forEach(lp=>{ d[lp.id]={clicks:0,views:0}; });
+  return d;
+}
+
+function saveData(d){ localStorage.setItem('ik_dashboard',JSON.stringify(d)); }
+
+function resetData(){
+  if(confirm('Reset all tracking data?')){
+    saveData(initData());
+    render();
+  }
+}
+
+// Allow LP pages to register clicks via postMessage or URL param
+window.addEventListener('message', e => {
+  if(e.data && e.data.type === 'IK_CLICK'){
+    const d = getData();
+    if(d[e.data.lp]){ d[e.data.lp].clicks++; saveData(d); render(); }
+  }
+  if(e.data && e.data.type === 'IK_VIEW'){
+    const d = getData();
+    if(d[e.data.lp]){ d[e.data.lp].views++; saveData(d); render(); }
+  }
+});
+
+// Check URL param for direct tracking
+const urlParams = new URLSearchParams(window.location.search);
+if(urlParams.get('click')){
+  const d = getData();
+  const lp = urlParams.get('click');
+  if(d[lp]){ d[lp].clicks++; saveData(d); }
+}
+if(urlParams.get('view')){
+  const d = getData();
+  const lp = urlParams.get('view');
+  if(d[lp]){ d[lp].views++; saveData(d); }
+}
+
+function render(){
+  const d = getData();
+  const sorted = [...LPS].map(lp=>({
+    ...lp,
+    clicks: d[lp.id].clicks,
+    views: d[lp.id].views,
+    rate: d[lp.id].views > 0 ? ((d[lp.id].clicks/d[lp.id].views)*100).toFixed(1) : 0
+  })).sort((a,b)=>b.clicks-a.clicks);
+
+  const totalClicks = sorted.reduce((s,l)=>s+l.clicks,0);
+  const totalViews = sorted.reduce((s,l)=>s+l.views,0);
+  const maxClicks = Math.max(...sorted.map(l=>l.clicks),1);
+  const winner = sorted[0];
+
+  // Top stats
+  document.getElementById('total-clicks').textContent = totalClicks;
+  document.getElementById('total-views').textContent = totalViews;
+  document.getElementById('best-lp').textContent = winner.clicks > 0 ? winner.emoji : '—';
+  document.getElementById('best-rate').textContent = winner.clicks > 0 ? winner.rate+'%' : '0%';
+
+  // Winner banner
+  if(winner.clicks > 0){
+    document.getElementById('winner-name').textContent = winner.name + ' is winning!';
+    document.getElementById('winner-desc').textContent = `${winner.clicks} clicks · ${winner.rate}% conversion rate`;
+  }
+
+  // Cards
+  const grid = document.getElementById('lp-grid');
+  grid.innerHTML = sorted.map((lp,i)=>`
+    <div class="lp-card ${i===0&&lp.clicks>0?'winner':''}">
+      <div class="lp-rank">${i+1}</div>
+      <div class="lp-info">
+        <h3>${lp.emoji} ${lp.name}</h3>
+        <div class="lp-url">${lp.url}</div>
+        <div class="bar-wrap"><div class="bar" style="width:${(lp.clicks/maxClicks)*100}%"></div></div>
+        <div class="lp-meta">
+          <span>👁 ${lp.views} views</span>
+          <span>🖱 ${lp.clicks} clicks</span>
+          <span>${lp.rate}% CVR</span>
+        </div>
+      </div>
+      <div class="lp-clicks">
+        <span class="click-num">${lp.clicks}</span>
+        <span class="click-label">Clicks</span>
+        <span class="click-rate">${lp.rate}%</span>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('last-update').textContent = new Date().toLocaleTimeString();
+}
+
+render();
+setInterval(render, 5000);
+</script>
+</body>
+</html>
