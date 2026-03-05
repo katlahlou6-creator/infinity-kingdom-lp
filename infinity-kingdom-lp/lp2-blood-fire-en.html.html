@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infinity Kingdom – LP2 Blood & Fire</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Oswald:wght@400;500;700&family=Barlow:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--red:#cc0000;--orange:#ff4400;--dark:#080000;--text:#f5e6d3}
+  body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;overflow-x:hidden}
+
+  /* FIRE BG */
+  .hero{
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;padding:2rem;
+    background:linear-gradient(180deg,#000 0%,#1a0000 40%,#000 100%);
+  }
+  .fire-bg{
+    position:absolute;inset:0;
+    background:radial-gradient(ellipse at 20% 80%,#cc000040 0%,transparent 50%),
+               radial-gradient(ellipse at 80% 70%,#ff440030 0%,transparent 50%),
+               radial-gradient(ellipse at 50% 100%,#8b000060 0%,transparent 60%);
+    animation:fireFlicker 3s ease-in-out infinite alternate;
+  }
+  @keyframes fireFlicker{
+    from{opacity:.7;transform:scale(1)}
+    to{opacity:1;transform:scale(1.02)}
+  }
+  .scanlines{
+    position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.3) 3px,rgba(0,0,0,.3) 4px);
+    opacity:.3;
+  }
+
+  /* COUNTDOWN BAR */
+  .urgency-bar{
+    position:fixed;top:0;left:0;right:0;z-index:200;
+    background:linear-gradient(90deg,var(--red),var(--orange));
+    padding:.6rem;text-align:center;
+    font-family:'Oswald',sans-serif;font-size:.95rem;letter-spacing:.1em;color:#fff;
+  }
+  .urgency-bar strong{font-size:1.1rem}
+
+  /* NAV */
+  nav{
+    position:fixed;top:2.5rem;left:0;right:0;z-index:100;
+    padding:1rem 3rem;display:flex;justify-content:space-between;align-items:center;
+  }
+  .nav-logo{font-family:'Black Han Sans',sans-serif;color:#fff;font-size:1.4rem;letter-spacing:.1em}
+  .nav-logo span{color:var(--red)}
+
+  /* HERO CONTENT */
+  .hero-content{position:relative;z-index:2;text-align:center;max-width:900px;padding-top:4rem}
+
+  .badge{
+    display:inline-block;background:var(--red);
+    font-family:'Oswald',sans-serif;font-size:.8rem;letter-spacing:.25em;
+    padding:.4rem 1.2rem;text-transform:uppercase;margin-bottom:2rem;
+    animation:badgePulse 1.5s ease-in-out infinite;
+  }
+  @keyframes badgePulse{0%,100%{box-shadow:0 0 0 0 rgba(204,0,0,.6)}50%{box-shadow:0 0 0 10px rgba(204,0,0,0)}}
+
+  h1{
+    font-family:'Black Han Sans',sans-serif;
+    font-size:clamp(4rem,12vw,10rem);
+    line-height:.9;letter-spacing:-.02em;color:#fff;
+    text-shadow:0 0 60px rgba(204,0,0,.8),0 0 120px rgba(255,68,0,.4);
+    animation:titleIn 1s ease forwards;
+    margin-bottom:.5rem;
+  }
+  @keyframes titleIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+
+  .title-red{color:var(--red);display:block}
+
+  .hero-sub{
+    font-family:'Oswald',sans-serif;font-size:1.3rem;letter-spacing:.3em;
+    color:#ff6640;text-transform:uppercase;margin-bottom:1.5rem;
+  }
+
+  .hero-desc{font-size:1.15rem;color:#d4a090;max-width:580px;margin:0 auto 3rem;line-height:1.7}
+
+  /* COUNTDOWN */
+  .countdown-wrap{margin-bottom:2.5rem}
+  .countdown-label{font-family:'Oswald',sans-serif;font-size:.8rem;letter-spacing:.3em;color:#ff6640;margin-bottom:.8rem;text-transform:uppercase}
+  .countdown{display:flex;gap:1rem;justify-content:center}
+  .cd-unit{text-align:center;min-width:70px}
+  .cd-num{
+    font-family:'Black Han Sans',sans-serif;font-size:2.8rem;
+    background:#1a0000;border:1px solid var(--red);
+    padding:.3rem .8rem;display:block;color:#fff;
+    box-shadow:0 0 20px rgba(204,0,0,.4),inset 0 0 20px rgba(204,0,0,.1);
+  }
+  .cd-text{font-family:'Oswald',sans-serif;font-size:.7rem;letter-spacing:.2em;color:#ff6640;margin-top:.4rem}
+
+  /* CTA */
+  .cta-big{
+    display:inline-block;font-family:'Oswald',sans-serif;font-size:1.3rem;
+    font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+    padding:1.2rem 4rem;background:linear-gradient(135deg,#cc0000,#ff4400);
+    color:#fff;border:none;cursor:pointer;text-decoration:none;
+    position:relative;overflow:hidden;transition:all .3s;
+    clip-path:polygon(0 0,100% 0,calc(100% - 15px) 100%,15px 100%);
+  }
+  .cta-big::before{
+    content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+    transition:left .5s;
+  }
+  .cta-big:hover::before{left:100%}
+  .cta-big:hover{transform:scale(1.05);filter:brightness(1.2)}
+
+  .cta-sub{margin-top:1rem;font-size:.85rem;color:#aa5550;font-style:italic}
+
+  /* SOCIAL NUMBERS */
+  .numbers{
+    position:relative;z-index:2;margin-top:5rem;
+    display:flex;justify-content:center;gap:4rem;flex-wrap:wrap;padding:0 2rem;
+  }
+  .number{text-align:center}
+  .number-val{font-family:'Black Han Sans',sans-serif;font-size:3rem;color:#fff;
+    text-shadow:0 0 30px rgba(204,0,0,.6);display:block}
+  .number-label{font-family:'Oswald',sans-serif;font-size:.8rem;letter-spacing:.2em;color:#aa5550;text-transform:uppercase}
+
+  /* STRIP */
+  .strip{
+    background:var(--red);padding:1.5rem;text-align:center;
+    font-family:'Oswald',sans-serif;font-size:1.1rem;letter-spacing:.15em;
+    text-transform:uppercase;overflow:hidden;white-space:nowrap;
+  }
+  .strip-inner{display:inline-block;animation:scroll 20s linear infinite}
+  @keyframes scroll{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
+
+  /* FEATURES BRUTAL */
+  .features{padding:5rem 2rem;background:#050000}
+  .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;max-width:1100px;margin:3rem auto 0;background:#cc000020}
+  .feat{padding:2.5rem 2rem;background:#050000;border-left:3px solid var(--red);transition:.3s}
+  .feat:hover{background:#1a0000}
+  .feat-num{font-family:'Black Han Sans',sans-serif;font-size:4rem;color:#cc000030;line-height:1;margin-bottom:.5rem}
+  .feat-title{font-family:'Oswald',sans-serif;font-size:1.1rem;letter-spacing:.1em;color:#fff;margin-bottom:.5rem;text-transform:uppercase}
+  .feat-text{color:#aa7070;font-size:.95rem;line-height:1.6}
+
+  .section-title{font-family:'Black Han Sans',sans-serif;font-size:2.5rem;text-align:center;color:#fff;text-shadow:0 0 30px rgba(204,0,0,.5)}
+
+  /* FINAL */
+  .final{
+    padding:7rem 2rem;text-align:center;
+    background:radial-gradient(ellipse at center bottom,#2a0000 0%,#050000 70%);
+  }
+  .final h2{font-family:'Black Han Sans',sans-serif;font-size:clamp(2.5rem,6vw,4rem);color:#fff;margin-bottom:1rem;text-shadow:0 0 40px rgba(204,0,0,.6)}
+  .final p{color:#aa5550;font-size:1.1rem;margin-bottom:3rem;letter-spacing:.05em}
+
+  @media(max-width:600px){.numbers{gap:2rem}.countdown{gap:.5rem}.cd-num{font-size:2rem}}
+</style>
+</head>
+<body>
+
+<div class="urgency-bar">
+  🔥 LAUNCH OFFER — Limited spots: <strong id="spots">247</strong> remaining · Exclusive bonus until midnight
+</div>
+
+<nav>
+  <div class="nav-logo">INFINITY<span>KINGDOM</span></div>
+</nav>
+
+<section class="hero">
+  <div class="fire-bg"></div>
+  <div class="scanlines"></div>
+  <div class="hero-content">
+    <div class="badge">🔥 Gaming Server #1 Dark Fantasy</div>
+    <h1>REIGN<span class="title-red">OR DIE</span></h1>
+    <p class="hero-sub">Infinity Kingdom Awaits</p>
+    <p class="hero-desc">The most brutal gaming server on the web. 50,000 warriors. Endless wars. No mercy. Are you ready?</p>
+
+    <div class="countdown-wrap">
+      <p class="countdown-label">⚡ Welcome bonus expires in</p>
+      <div class="countdown">
+        <div class="cd-unit"><span class="cd-num" id="cd-h">11</span><div class="cd-text">Hours</div></div>
+        <div class="cd-unit"><span class="cd-num" id="cd-m">47</span><div class="cd-text">Minutes</div></div>
+        <div class="cd-unit"><span class="cd-num" id="cd-s">23</span><div class="cd-text">Seconds</div></div>
+      </div>
+    </div>
+
+    <a href="#" class="cta-big">⚔ PLAY FOR FREE →</a>
+    <p class="cta-sub">✓ Free · ✓ Disponible maintenant · ✓ +50 000 joueurs actifs</p>
+  </div>
+</section>
+
+<div class="numbers">
+  <div class="number"><span class="number-val">50K+</span><span class="number-label">Guerriers actifs</span></div>
+  <div class="number"><span class="number-val">2M+</span><span class="number-label">Battles Fought</span></div>
+  <div class="number"><span class="number-val">4.9★</span><span class="number-label">Player Rating</span></div>
+  <div class="number"><span class="number-val">24/7</span><span class="number-label">Live Servers</span></div>
+</div>
+
+<div class="strip">
+  <span class="strip-inner">⚔ REAL-TIME BATTLES &nbsp;&nbsp;🔥 ULTRA-ACTIVE GUILDS &nbsp;&nbsp;💀 INTENSE PVP &nbsp;&nbsp;🐉 LEGENDARY BOSSES &nbsp;&nbsp;🏆 GLOBAL LEADERBOARDS &nbsp;&nbsp;⚔ REAL-TIME BATTLES &nbsp;&nbsp;🔥 ULTRA-ACTIVE GUILDS &nbsp;&nbsp;💀 INTENSE PVP</span>
+</div>
+
+<section class="features">
+  <h2 class="section-title">Why Infinity Kingdom?</h2>
+  <div class="features-grid">
+    <div class="feat"><div class="feat-num">01</div><h3 class="feat-title">Ruthless PVP</h3><p class="feat-text">Real-time fights against real players. Every win counts. Every loss burns.</p></div>
+    <div class="feat"><div class="feat-num">02</div><h3 class="feat-title">Guilds Puissantes</h3><p class="feat-text">Join an elite guild or forge your own. Territory wars every week.</p></div>
+    <div class="feat"><div class="feat-num">03</div><h3 class="feat-title">Events 24/7</h3><p class="feat-text">Boss raids, tournaments, invasions. Something is always happening in the Kingdom.</p></div>
+    <div class="feat"><div class="feat-num">04</div><h3 class="feat-title">Infinite Progression</h3><p class="feat-text">Dozens of classes, hundreds of legendary items. Months of content await you.</p></div>
+  </div>
+</section>
+
+<section class="final">
+  <h2>STOP READING.<br>START CONQUERING.</h2>
+  <p>Every second you wait, someone else takes your place.</p>
+  <a href="#" class="cta-big" style="font-size:1.4rem;padding:1.4rem 5rem">⚔ DOWNLOAD NOW</a>
+  <p style="margin-top:1.5rem;color:#664444;font-size:.85rem">Free · Aucune carte requise · Installation en 2 minutes</p>
+</section>
+
+<script>
+// countdown
+let end = new Date();
+end.setHours(end.getHours()+11, end.getMinutes()+47, end.getSeconds()+23);
+function tick(){
+  let diff = end-new Date();
+  if(diff<0)diff=0;
+  let h=Math.floor(diff/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000);
+  document.getElementById('cd-h').textContent=String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(s).padStart(2,'0');
+}
+setInterval(tick,1000);tick();
+// spots
+let spots=247;
+setInterval(()=>{if(spots>180&&Math.random()>.7){spots--;document.getElementById('spots').textContent=spots}},8000);
+</script>
+</body>
+</html>
